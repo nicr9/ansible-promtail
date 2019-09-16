@@ -1,0 +1,16 @@
+---
+- name: Create the promtail group
+  group:
+    name: "{{ promtail_system_group }}"
+    state: present
+    system: true
+
+- name: Create the promtail user
+  user:
+    name: "{{ promtail_system_user }}"
+    groups: "{{ promtail_system_group }}"
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    createhome: false
+    home: /
