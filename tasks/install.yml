@@ -14,3 +14,42 @@
     system: true
     createhome: false
     home: /
+
+- name: create promtail configuration directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: promtail
+    mode: 0770
+  with_items:
+    - "{{ promtail_config_dir }}"
+
+- name: download promtail binary to local folder
+  get_url:
+    url: "https://github.com/grafana/loki/releases/download/v{{ promtail_version }}/promtail_linux_{{ go_arch }}.gz"
+    dest: "/tmp/promtail_linux_{{ go_arch }}.gz"
+    checksum: "sha256:{{ promtail_checksum }}"
+  register: _download_archive
+  until: _download_archive is succeeded
+  retries: 5
+  delay: 2
+  deletgate_to: localhost
+
+- name: unpack promtail binaries
+  command: "gunzip /tmp/promtail_linux_{{ go_arch }}.gz"
+  args:
+    creates: "/tmp/promtail_linux_{{ go_arch }}"
+  deletgate_to: localhost
+
+- name: propagate promtail binary
+  copy:
+    src: "/tmp/promtail_linux_{{ go_arch }}"
+    dest: "/usr/local/bin/{{ item }}"
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - promtail
+  notify:
+    - restart promtail
