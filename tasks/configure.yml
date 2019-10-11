@@ -7,3 +7,12 @@
     group: root
     mode: 0644
   notify: restart promtail
+
+- name: Copy the promtail config file
+  template:
+    src: promtail.yml.j2
+    dest: /etc/promtail/promtail.yml
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart promtail
