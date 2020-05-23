@@ -13,6 +13,6 @@
     src: promtail.yml.j2
     dest: /etc/promtail/promtail.yml
     owner: root
-    group: root
+    group: "{{ promtail_system_group }}"
     mode: 0644
   notify: restart promtail

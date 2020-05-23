@@ -34,13 +34,13 @@
   until: _download_archive is succeeded
   retries: 5
   delay: 2
-  deletgate_to: localhost
+  delegate_to: localhost
 
 - name: unpack promtail binaries
   command: "gunzip /tmp/promtail_linux_{{ go_arch }}.gz"
   args:
     creates: "/tmp/promtail_linux_{{ go_arch }}"
-  deletgate_to: localhost
+  delegate_to: localhost
 
 - name: propagate promtail binary
   copy:
