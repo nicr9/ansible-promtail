@@ -7,7 +7,3 @@ go_arch_map:
   armv6l: 'armv6'
 
 go_arch: "{{ go_arch_map[ansible_architecture] | default(ansible_architecture) }}"
-
-promtail_system_user: "promtail"
-promtail_system_group: "promtail"
-promtail_config_dir: "/etc/promtail"

@@ -1,2 +1,6 @@
 ---
 promtail_version: latest
+
+promtail_system_user: "promtail"
+promtail_system_group: "promtail"
+promtail_config_dir: "/etc/promtail"
