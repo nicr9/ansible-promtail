@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
 
 [Unit]
-Description=promtail
+Description=promtail (v{{ promtail_version }})
 After=network-online.target
 StartLimitInterval=0
 StartLimitIntervalSec=0
