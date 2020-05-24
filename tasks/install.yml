@@ -27,8 +27,8 @@
 
 - name: download promtail binary to local folder
   get_url:
-    url: "https://github.com/grafana/loki/releases/download/v{{ promtail_version }}/promtail_linux_{{ go_arch }}.gz"
-    dest: "/tmp/promtail_linux_{{ go_arch }}.gz"
+    url: "https://github.com/grafana/loki/releases/download/v{{ promtail_version }}/{{ promtail_release }}"
+    dest: "/tmp/{{ promtail_release }}"
     checksum: "sha256:{{ promtail_checksum }}"
   register: _download_archive
   until: _download_archive is succeeded
@@ -36,20 +36,17 @@
   delay: 2
   delegate_to: localhost
 
-- name: unpack promtail binaries
-  command: "gunzip /tmp/promtail_linux_{{ go_arch }}.gz"
-  args:
-    creates: "/tmp/promtail_linux_{{ go_arch }}"
-  delegate_to: localhost
+- name: propagate promtail binaries to host
+  unarchive:
+    src: "/tmp/{{ promtail_release }}"
+    dest: "/tmp"
 
-- name: propagate promtail binary
+- name: move binary to /usr/local/bin
   copy:
-    src: "/tmp/promtail_linux_{{ go_arch }}"
-    dest: "/usr/local/bin/{{ item }}"
+    src: "/tmp/{{ promtail_target }}"
+    dest: "/usr/local/bin/promtail"
     mode: 0755
     owner: root
-    group: root
-  with_items:
-    - promtail
+    group: promtail
   notify:
     - restart promtail
