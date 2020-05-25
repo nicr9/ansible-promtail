@@ -1,5 +1,7 @@
 ---
 promtail_version: latest
+promtail_http_listen_host: 0.0.0.0
+promtail_http_listen_port: 9080
 
 promtail_system_user: "promtail"
 promtail_system_group: "promtail"

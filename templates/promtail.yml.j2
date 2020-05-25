@@ -1,19 +1,20 @@
 {{ ansible_managed | comment }}
+
 server:
-  http_listen_port: 9080
+  http_listen_port: {{ promtail_http_listen_port }}
   grpc_listen_port: 0
 
 positions:
   filename: /tmp/positions.yaml
 
 clients:
-  - url: http://localhost:3100/loki/api/v1/push
+  - url: "http://localhost:3100/loki/api/v1/push"
 
 scrape_configs:
-- job_name: system
-  static_configs:
-  - targets:
-      - localhost
+- job_name: journal
+  journal:
     labels:
-      job: varlogs
-      __path__: /var/log/*log
+      job: systemd-journal
+  relabel_configs:
+    - source_labels: ['__journal__systemd_unit']
+      target_label: 'unit'
