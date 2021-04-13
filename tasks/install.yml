@@ -8,7 +8,9 @@
 - name: Create the promtail user
   user:
     name: "{{ promtail_system_user }}"
-    groups: "{{ promtail_system_group }}"
+    group: "{{ promtail_system_group }}"
+    groups:
+    - systemd-journal
     append: true
     shell: /usr/sbin/nologin
     system: true
